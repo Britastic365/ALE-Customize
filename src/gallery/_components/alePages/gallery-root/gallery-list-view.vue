@@ -43,10 +43,12 @@ import loaderLight from "@output-images/gallery-table-loader-light.gif";
 import loaderDark  from "@output-images/gallery-table-loader-dark.gif";
 import stringifyArray from "@output-mixins/gallery-stringifyArray.js";
 import prepareKeys from "@output-mixins/gallery-prepareKeys.js";
+import draggable from 'vuedraggable';
 
 export default {
   name: "aleBooks",
   mixins: [stringifyArray, prepareKeys],
+  components: { draggable },
   data: function() {
     return {
       spreadsheetTop: 170,
@@ -85,7 +87,8 @@ export default {
         
       });
     },
-    
+    onColumnReorder() {
+    console.log('Columns reordered:', this.keys);
   }
 };
 </script>
