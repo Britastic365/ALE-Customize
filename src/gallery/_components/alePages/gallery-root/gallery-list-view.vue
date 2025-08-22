@@ -8,7 +8,11 @@ ref="listView"
   <div class="list-view-inner-wrap">
     <table>
       <thead>
-        <gallery-header :keys="keys"></gallery-header>
+        <draggable v-model="keys" tag="tr" :animation="200" @end="onColumnReorder">
+    <th v-for="key in keys" :key="key"> <!-- header label here, e.g. from a mapping -->
+      {{ key }}
+    </th>
+  </draggable>
       </thead>
       <tbody>
         
