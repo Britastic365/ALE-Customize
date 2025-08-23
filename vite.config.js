@@ -42,11 +42,11 @@ const copyFilesBefore = [
   { src: src('gallery/app.webmanifest'),    dest: dist() },
 ];
 const copyFilesAfter = [
-  { src: src('extension-js'),            dest: 'assets' },
-  { src: src('assets/js'),               dest: 'assets' },
-  { src: src('gallery/app.webmanifest'), dest: dist('') },
-  { src: src('gallery/images'),          dest: dist('assets') },
-  { src: src('gallery/favicons'),        dest: dist('') },
+  { src: 'src/extension-js/*',      dest: 'assets/extension-js' },
+  { src: 'src/assets/js/*',         dest: 'assets/js' },
+  { src: 'src/gallery/app.webmanifest', dest: '' },
+  { src: 'src/gallery/images/*',    dest: 'assets/images' },
+  { src: 'src/gallery/favicons/*',  dest: 'favicons' },
 ];
 
 const inputs = {};

@@ -4,10 +4,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "development=true yarn vite",
-    "build": "gallerySingleFile=true yarn vite build && wallpaperSingleFile=true yarn vite build && yarn vite build && node zipper.js",
-    "build1": "yarn vite build",
-    "preview": "yarn vite preview --port 4173"
+    "dev": "cross-env development=true vite",
+    "build": "cross-env gallerySingleFile=true vite build && cross-env wallpaperSingleFile=true vite build && vite build && node zipper.js",
+    "build1": "vite build",
+    "preview": "vite preview --port 4173"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.0",
@@ -57,6 +57,7 @@
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@vitejs/plugin-vue": "3.2.0",
+    "cross-env": "^10.0.0",
     "naive-ui": "^2.40.4",
     "picocolors": "^1.1.1",
     "rollup-plugin-copy": "^3.5.0",
