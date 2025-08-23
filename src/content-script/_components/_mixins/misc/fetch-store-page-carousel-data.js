@@ -1,7 +1,15 @@
+//replaced const carousel unique identifier
+
 export default {
   methods: {
     getDataFromCarousel: function(parentBook, audible, key, carouselID) {
-      const carousel = audible.querySelector( "#adbl-web-carousel-c" + carouselID );
+        // Defensive check: make sure audible is a DOM element
+      if (!audible || typeof audible.querySelector !== "function") {
+         // Optionally log for debugging:
+         // console.warn("getDataFromCarousel: 'audible' is not a DOM element", audible);
+         return;
+      }
+      const carousel = audible.querySelector('adbl-product-carousel[skip-link-title="Listeners who picked this title also picked"]'); //Replaced carousel ID with carousel heading as unique identifier since no carousel ID found in html
 
       if (carousel) {
         const books = [];

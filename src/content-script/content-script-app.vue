@@ -1,3 +1,5 @@
+// added carousel to both waterfalls
+
 <template>
   <cont-overlay>
     <cont-menu-screen v-if="ui === 'menu-screen'" :domainExtension="domainExtension" :wishlistUrl="wishlistUrl" />
@@ -114,14 +116,15 @@ export default {
           hotpotato = hotpotato || {};
           if ( hotpotato.books ) config.oldBooksLength = hotpotato.books.length;
           hotpotato.config = config;
-          
+
           const waterfallArray = [
             function(callback) { callback(null, hotpotato); },
             vue.getDataFromLibraryPages,    // Can be scraped alone
             // vue.getDataFromLibraryPagesFin, // Requires library page data
             vue.getDataFromStorePages,      // Requires library page data
+            vue.getDataFromCarousel,        // <--- ADDED TO ENABLE CAROUSEL (for library)
             vue.getDataFromSeriesPages,     // Requires store page data (for fallback)
-            function(hotpotato, callback) { 
+            function(hotpotato, callback) {
               
               if ( !_.find(hotpotato.config.steps, { name: "books" }) ) {
                 callback(null, hotpotato); 
@@ -168,7 +171,8 @@ export default {
             },
             vue.getDataFromWishlist,        // Can be scraped alone
             vue.getDataFromStorePages,      // Requires wishlist data
-            function(hotpotato, callback) { 
+            vue.getDataFromCarousel,        // <--- ADDED TO ENABLE CAROUSEL
+            function(hotpotato, callback) {
               
               // Not extracting wishlist, skipping save...
               if ( !_.find(hotpotato.config.steps, { name: "wishlist" }) ) {

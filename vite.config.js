@@ -1,18 +1,30 @@
-// NOTE-1: For some reason making changes to this file in "dev mode", or 
+// NOTE-1: For some reason making changes to this file in "dev mode", or
 // while running "yarn vite" will cause an error. Restart dev server.
 
-// NOTE-2: I don't know why, but sometimes the service worker does not 
+// NOTE-2: I don't know why, but sometimes the service worker does not
 // work. Extraction probably works and while gallery page works, any
-// feature that moves you to that page will not. The fix seems to be to  
+// feature that moves you to that page will not. The fix seems to be to
 // re-install the extension from the dist folder.
 
+//updated "const copyFilesAfter" section to use regular string paths with forward slashes instead of src()
+//     { src: 'src/extension-js/*',      dest: 'assets/extension-js' },
+//added "import { fileURLToPath, URL } from 'node:url';"
+//changed src, dist, root functions: "const src = function(p = '', prefix = './src') {
+//   return path.join(prefix, p);
+// };
+// const dist = function(p = '') {
+//   return path.join('dist', p);
+// };
+// const root = function(p = '') {
+//   return path.join('.', p);
+// };"
+
+import path from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { crx } from '@crxjs/vite-plugin';
-// import manifest from './manifest.json'; 
-// import manifest from "./manifest.json" with { type: "json" };
-import manifest from './manifest.json' assert { type: 'json' } // Node >=17
+import manifest from './manifest.json' assert { type: 'json' }; // Node >=17
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import copy from 'rollup-plugin-copy';
 import Icons from 'unplugin-icons/vite';
@@ -24,13 +36,18 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 import { customFilePathsJSON, customSingleFileGallery } from "./custom-vite-plugins.js";
 import { ViteEjsPlugin } from "vite-plugin-ejs";
 
-const src = function( path, prefix ) {
-  prefix = prefix || './src';
-  path = path || '';
-  return fileURLToPath(new URL( prefix+'/'+path, import.meta.url ));
+const src = function(p = '', prefix = 'src') {
+  return path.join(prefix, p);
 };
-const dist = function( path ) { return src(path, './dist'); };
-const root = function( path ) { return src(path, './'); };
+const dist = function(p = '') {
+  return path.join('dist', p);
+};
+const root = function(p = '') {
+  return path.join('.', p);
+};
+
+// For publicDir, Vite requires an absolute path
+const absolutePublicDir = fileURLToPath(new URL('./src/public', import.meta.url));
 
 const devmode = process.env.development;
 const gallerySingleFile = process.env.gallerySingleFile;
@@ -38,51 +55,32 @@ const wallpaperSingleFile = process.env.wallpaperSingleFile;
 const buildSingleFile = gallerySingleFile || wallpaperSingleFile;
 
 const copyFilesBefore = [
-  // { src: src('assets/js'),    dest: 'assets' },
-  { src: src('gallery/app.webmanifest'),    dest: dist() },
+  { src: src('gallery/app.webmanifest'), dest: dist() },
 ];
 const copyFilesAfter = [
-  { src: 'src/extension-js/*',      dest: 'assets/extension-js' },
-  { src: 'src/assets/js/*',         dest: 'assets/js' },
-  { src: 'src/gallery/app.webmanifest', dest: '' },
-  { src: 'src/gallery/images/*',    dest: 'assets/images' },
-  { src: 'src/gallery/favicons/*',  dest: 'favicons' },
+    { src: 'src/extension-js/*',      dest: 'assets/extension-js' },
+    { src: 'src/assets/js/*',         dest: 'assets/js' },
+    { src: 'src/gallery/app.webmanifest', dest: '' },
+    { src: 'src/gallery/images/*',    dest: 'assets/images' },
+    { src: 'src/gallery/favicons/*',  dest: 'favicons' },
 ];
 
 const inputs = {};
 let manualChunks = null;
 
-if ( gallerySingleFile ) {
+if (gallerySingleFile) {
   inputs['gallery'] = 'gallery.html';
-}
-else if ( wallpaperSingleFile ) {
+} else if (wallpaperSingleFile) {
   inputs['animated-wallpaper'] = 'animated-wallpaper.html';
-}
-else {
+} else {
   inputs['gallery'] = 'gallery.html';
   inputs['audible-library-extractor-content-script'] = 'audible-library-extractor-content-script.js';
   inputs['wallpaper-creator'] = 'wallpaper-creator.html';
   inputs['animated-wallpaper'] = 'animated-wallpaper.html';
-  
-  if ( devmode ) {
-    // manualChunks = function( id ) {
-      
-    //   if ( id.includes('jquery') ) {
-    //     return 'jquery';
-    //   }
-    //   else if (  id.includes('jszip') || id.includes('jszip-utils') ) {
-    //     return 'jszip';
-    //   }
-    //   else if ( id.includes('howler') ) {
-    //     return 'howler';
-    //   }
-    //   else {
-    //     return 'vendor';
-    //   }
-      
-    // };
-  }
-  else {
+
+  if (devmode) {
+    // manualChunks = function( id ) { ... }
+  } else {
     manualChunks = {
       jquery: ['jquery'],
       jszip: ['jszip', 'jszip-utils'],
@@ -91,31 +89,25 @@ else {
   }
 }
 
-// https://vitejs.dev/config/
 export default defineConfig({
   base: '',
-  publicDir: src('public'),
-  // Build options
-  // root: 'src',
+  publicDir: absolutePublicDir,
   build: {
     outDir: dist(''),
-    // emptyOutDir: buildSingleFile,
     emptyOutDir: true,
     chunkSizeWarningLimit: 800, // KB
     rollupOptions: {
       input: inputs,
       output: {
-        // dir: 'dist',
-				entryFileNames: 'assets/[name].[hash].js',
-				assetFileNames: 'assets/[name].[hash].[ext]',
-				chunkFileNames: 'assets/[name].[hash].js',
+        entryFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]',
+        chunkFileNames: 'assets/[name].[hash].js',
         manualChunks: manualChunks,
       },
     },
     commonjsOptions: {
       esmExternals: true,
-    }, 
-    // sourcemap: 'inline',
+    },
   },
   optimizeDeps: {
     include: [
@@ -131,33 +123,28 @@ export default defineConfig({
       'domurl',
       'file-saver',
       'howler',
-      '@splidejs/vue-splide', 
-      'vue-slider-component', 
+      '@splidejs/vue-splide',
+      'vue-slider-component',
       '@vueform/multiselect',
       'fitty',
     ],
   },
-  // Basically string replacements. You can think of as a global immutable variable.
   define: {
     "$version": JSON.stringify(process.env.npm_package_version),
   },
   plugins: [
     vue(),
-    ( buildSingleFile ? viteSingleFile() : undefined ),
+    buildSingleFile ? viteSingleFile() : undefined,
     Components({
-      dirs: [
-        'src',
-      ],
+      dirs: [ 'src' ],
       extensions: ['vue'],
       deep: true,
       resolvers: [
-        IconsResolver({
-          prefix: '',
-        }),
+        IconsResolver({ prefix: '' }),
       ],
-    }), 
+    }),
     Icons(),
-    ( buildSingleFile ? undefined : crx({ manifest }) ),
+    buildSingleFile ? undefined : crx({ manifest }),
     copy({
       targets: copyFilesBefore,
       hook: 'generateBundle',
@@ -169,9 +156,7 @@ export default defineConfig({
     }),
     dynamicImport(),
     loadVersion(),
-    ViteEjsPlugin({
-      singleFileMode: buildSingleFile,
-    }),
+    ViteEjsPlugin({ singleFileMode: buildSingleFile }),
     customFilePathsJSON,
     customSingleFileGallery,
     buildSingleFile ? null : splitVendorChunkPlugin(),
@@ -205,11 +190,11 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-      scss: { 
-         additionalData: `
+      scss: {
+        additionalData: `
           @use "@gallery/_variables.scss" as *;
-        ` 
-     }, 
+        `
+      },
     },
   },
 });
