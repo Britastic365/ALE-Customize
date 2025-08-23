@@ -1,3 +1,5 @@
+//Added logging before and after carousel extraction
+
 export default {
   methods: {
     getDataFromStorePages: function(hotpotato, storePagesFetched) {
@@ -511,9 +513,15 @@ export default {
         // Around July 2020 audible has removed any mention of the added date.
         // It was early 2020 when it was removed from the library page and now it's totally gone aside from the purchase history.
         // book.dateAdded   = vue.fixDates( audible.querySelector('#adbl-buy-box-purchase-date > span') );
-        
+        console.log("Before fetching carousels for", book && book.asin);
+        try {
         vue.getDataFromCarousel(book, audible, "peopleAlsoBought", 5);
         vue.getDataFromCarousel(book, audible, "moreLikeThis", 6);
+        } catch (e) {
+            console.error("Error during carousel extraction:", e);
+        }
+          console.log("After fetching carousels for", book && book.asin);
+
         // Audible seemed to have stopped using the ↑↑↑ "more like this" carousel in store pages around 2020 march-april.
         
         book = _.omitBy(book, _.isNull);

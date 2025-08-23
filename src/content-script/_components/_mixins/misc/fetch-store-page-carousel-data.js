@@ -1,4 +1,25 @@
 //replaced const carousel unique identifier
+//added logging to carouse extraction at beginning
+
+getDataFromCarousel: function(parentBook, audible, key, carouselID) {
+    console.log("getDataFromCarousel called for", key, "on", parentBook && parentBook.asin);
+
+    if (!audible || typeof audible.querySelector !== "function") {
+        console.warn("getDataFromCarousel: audible is not a DOM element", audible);
+        return;
+    }
+
+    // Log before and after carousel selector
+    const carousel = audible.querySelector('adbl-product-carousel[skip-link-title="Listeners also enjoyed..."]');
+    console.log("Carousel found:", !!carousel);
+
+    if (!carousel) {
+        console.warn("No carousel found for", key, "on", parentBook && parentBook.asin);
+        return;
+    }
+
+    // (rest of your code, add more logs as needed)
+}
 
 export default {
   methods: {
