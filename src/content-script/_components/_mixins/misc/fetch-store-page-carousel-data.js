@@ -9,7 +9,7 @@ export default {
          // console.warn("getDataFromCarousel: 'audible' is not a DOM element", audible);
          return;
       }
-      const carousel = audible.querySelector('adbl-product-carousel[skip-link-title="Listeners who picked this title also picked"]'); //Replaced carousel ID with carousel heading as unique identifier since no carousel ID found in html
+        const carousel = audible.querySelector('adbl-product-carousel[skip-link-title="Listeners also enjoyed..."]'); //Replaced carousel ID with carousel heading as unique identifier since no carousel ID found in html
 
       if (carousel) {
         const books = [];
