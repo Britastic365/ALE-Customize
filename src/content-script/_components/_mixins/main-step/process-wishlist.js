@@ -1,3 +1,4 @@
+//replaced each mention of hotpotato.wishlist with hotpotato.books to save wishlist data with library data so it would be processed the same by process-series-pages.js
 export default {
   methods: {
     getDataFromWishlist: function(hotpotato, wishlistFetched) {
@@ -72,8 +73,8 @@ export default {
             }
           ],
           function(err, books) {
-            
-            if ( books.length ) hotpotato.wishlist = books;
+
+            if ( books.length ) hotpotato.books = (hotpotato.books || []).concat(books); //replaced .wishlist with .books to add to books, not replace it
             
             vue.$nextTick(function() {
               hotpotato.config.getStorePages = 'wishlist';
@@ -103,10 +104,10 @@ export default {
         }
         asin  = DOMPurify.sanitize( asin );
         
-        let carryOnMyWaywardPines = hotpotato.books ? !_.find( hotpotato.books, { asin: asin }) : true;
+        let carryOnMyWaywardPines = hotpotato.books ? !_.find( hotpotato.books, { asin: asin }) : true; //replaced .wishlist with .books
         if ( carryOnMyWaywardPines ) {
           
-          let bookInMemory = _.find(hotpotato.wishlist, ["asin",  asin]);
+          let bookInMemory = _.find(hotpotato.books, ["asin",  asin]);
           let fullScan_ALL_partialScan_NEW = (vue.$store.state.storageHasData.wishlist && !bookInMemory) || !vue.$store.state.storageHasData.wishlist;
           let book = vue.$store.state.storageHasData.wishlist && bookInMemory ? bookInMemory : {};
           
