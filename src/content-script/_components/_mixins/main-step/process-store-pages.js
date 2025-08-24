@@ -515,7 +515,7 @@ export default {
         // book.dateAdded   = vue.fixDates( audible.querySelector('#adbl-buy-box-purchase-date > span') );
         console.log("Before fetching carousels for", book && book.asin);
         try {
-        vue.getDataFromCarousel(book, audible, "peopleAlsoBought", 5);
+        vue.getDataFromCarousel(book, audible, "peopleAlsoLiked", 5);
         vue.getDataFromCarousel(book, audible, "moreLikeThis", 6);
         } catch (e) {
             console.error("Error during carousel extraction:", e);
