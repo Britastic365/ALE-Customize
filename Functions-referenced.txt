@@ -1,0 +1,32 @@
+getDataFromLibraryPages
+s
+r
+za
+n
+vu
+init_step_extract
+emit
+takeNextStep
+extract
+Xc.r.loading.S.onClick.e.<computed>.e.<computed>
+ui
+un
+i
+
+GET TITLES FROM FIRST LIBRARY PAGE
+
+
+GET DATA FROM FIRST BOOK
+GET DATA FROM SECOND BOOK
+GET DATA FROM 3RD BOOK
+GET SERIES DATA (start:
+functionName: takenextstep
+
+LIBRARY EXTRACTION
+"functionName": "getAllSeriesPages",
+"functionName": "getDataFromSeriesPages",
+"functionName": "getAllSeriesPages",
+"functionName": "getDataFromSeriesPages"
+"functionName": "getBooksFromSeries"
+"functionName": "getAllSeriesPages"
+"functionName": "getDataFromSeriesPages"

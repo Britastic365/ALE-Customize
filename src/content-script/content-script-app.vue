@@ -50,6 +50,7 @@ export default {
     getDataFromCollections,
     getDataFrompUserReviews,
     getDataFromWishlist,
+    getDataFromSeriesPages,
     getDataFromPurchaseHistory,
     helpers,
   ],
@@ -168,6 +169,7 @@ export default {
             },
             vue.getDataFromWishlist,        // Can be scraped alone
             vue.getDataFromStorePages,      // Requires wishlist data
+            vue.getDataFromSeriesPages,      // Requires store page data
             function(hotpotato, callback) { 
               
               // Not extracting wishlist, skipping save...

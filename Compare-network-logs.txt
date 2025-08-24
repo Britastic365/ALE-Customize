@@ -1,0 +1,51 @@
+first book (series)
+start: 1647
+end: 2421
+774 lines
+
+second book (so series)
+start: 2422
+end: 3196
+774 lines
+
+Third book (podcast)
+start: 3197
+end:
+
+Series extraction start
+first series
+start: 4179
+
+Functionname: Done
+during book extraction: 2 "done"
+
+CURRENT SUMMARY OF UNDERSTANDING
+-The Audible Library Extractor (“ALE-Customize”) uses a multi-step async “waterfall” extraction process
+(see src/content-script/content-script-app.vue).
+-Extraction steps (for library, wishlist, store pages, etc.) are managed as an array of functions, each passing results
+to the next via callbacks, typically named done or callback.
+-Each item (e.g., book) in a batch extraction is processed asynchronously. When an item’s extraction is complete,
+its callback (done) is called. When all in the batch are done, the step’s callback is called to continue the waterfall.
+-Stack traces may show multiple done functions called. The first usually marks the completion of an individual async task
+(e.g., extraction for a single book), while the next may represent the completion of the entire batch, or step.
+-The actual processing (fetching, parsing, mapping, etc.) for each book occurs between these done calls.
+-The amapxios mixin is a utility for mapping over async axios requests, used throughout the extraction steps.
+-To trace or modify data extraction, focus on the extraction step functions and how they use amapxios and their
+respective done/callback logic.
+
+WISHLIST START
+
+Book 1
+start: 24081
+end: 26395
+2314 lines
+done: 9
+
+Book 2
+start: 26395
+end:28708
+2313
+done: 9
+
+Book 3
+start: 28709
