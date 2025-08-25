@@ -7,6 +7,9 @@ Changes from original ALE
 2. Added de-duplication to series in cleanup phase of content-script-app.vue
     RESULT: Success! No duplicate ASINs in series anymore!
 
+I believe an ASIN was being added from both hotpotato.books AND from audible wishlist status,
+when checking the book's status in my actual audible account.
+
 8/24/25
 1. Added getseriesdata to after getwishlistdata (after it's getstoredata) in src\content-script\content-script-app.vue
 to fetch series data twice: after library book data retrieval and after wishlist book data retrieval.
@@ -33,54 +36,3 @@ to isolate errors.
                          -Lists 4 books in the series even though it correctly counts 3 total books in the series
                 -Series Detail (when clicking on series in series table): Shows 2 rows for the same wishlist book.
 
-Possible Next Step
--Examine the created gallery files to find out if the book is actually duplicated, or just being shown twice
-in series for some reason.
-    -Library.js: Wishlist series book only mentioned once.
-    -Series.js: Wishlist books in series mentioned twice.
--Added deduplication to process-store-pages.js and process-series-pages.js and issue still happening.
-
-
-Not entirely sure why this is happening. Maybe it something that needs to be fixed when the series data is being written; or a filter needs
-to be added in the series information display. AI suggests looking deduplication logic for the main library view display and series view.
-
-Copilot suggestion:
-1. Main Library Display (Library Page)
-Look for the code that renders the list of books.
-This will likely be in a Vue component for the library/gallery, such as a file named something like:
-src/gallery/_components/alePages/AleLibrary.vue
-src/gallery/gallery-app.vue
-Or a similar main Vue file responsible for the page with your book gallery.
-What to search for:
-Computed properties or functions that prepare the list of books for display.
-Look for usage of _.uniqBy(books, 'asin'), .filter(), .map(), or similar.
-Search for the word uniq or dedup or just asin in those files.
-2. Series View
-Look for the component that displays the series details.
-This might be in a file like:
-src/gallery/_components/alePages/AleSeries.vue
-Or a similar file for the series detail/page/view.
-Here too, check for any logic preparing the list of books in the series for display.
-Search for code that filters hotpotato.books or your book array by series, and see if it deduplicates by ASIN.
-3. How to Search
-If using VS Code or similar, search the project for:
-uniqBy
-asin
-dedup
-books (and see where it's mapped or filtered for the library or series display)
-4. What it will look like
-Deduplicated:
-js
-const booksToShow = _.uniqBy(books, 'asin');
-Not deduplicated:
-js
-const booksToShow = books.filter(...);
-// but no uniqBy or similar
-5. Based on your repo’s structure
-Your main gallery entrypoint is likely in src/gallery/gallery-app.vue or a component there.
-Series logic may be in src/gallery/_components/alePages/AleSeries.vue or similar.
-6. Summary
-Look in the Vue files/components for the library and series pages.
-Search for computed properties or methods that build the book arrays for display.
-Check if they use _.uniqBy or similar deduplication on ASIN.
-Add deduplication where it is missing (likely in the series display).
