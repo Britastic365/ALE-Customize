@@ -431,6 +431,10 @@ export default {
         else if ( !book.series ) {
           book.series = vue.getSeries(audible.querySelector(".seriesLabel"));
         }
+        // *** Deduplicate series ***
+        if (book.series && Array.isArray(book.series)) {
+            book.series = _.uniqBy(book.series, "asin");
+        }
         
         // GET WHISPER SYNC
         // From data 

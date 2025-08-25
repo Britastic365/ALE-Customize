@@ -1,10 +1,17 @@
 Changes from original ALE
 (in addition to what was required for me to package it)
 
+8/25/25
+1. Tried adding de-duplication to series-processing
+    RESULT: Nothing changed
+2. Added de-duplication to series in cleanup phase of content-script-app.vue
+    RESULT: Success! No duplicate ASINs in series anymore!
+
+8/24/25
 1. Added getseriesdata to after getwishlistdata (after it's getstoredata) in src\content-script\content-script-app.vue
 to fetch series data twice: after library book data retrieval and after wishlist book data retrieval.
     Result: nothing changed; plugin still worked, but no additional series data retrieved (or shown) in gallery.
-2. Changed src\content-script\_mixins\main-step\process-wishlist.js to save wishlist data to hotpotato.books instead of hotpotato.wishlist
+2. Changed src\content-script\_components\_mixins\main-step\process-wishlist.js to save wishlist data to hotpotato.books instead of hotpotato.wishlist
 because even though wishlist series data seems to be saved in the same place as library series, process-series-pages.js seems to be checking
 series data against hotpotato.books and only processing series if a book appears in that file. Ony other thing added was to ensure
 hotpotato.books was added to, not replaced, by wishlist data.  New possibility of duplicates was there but wanted to change things one by one
@@ -20,13 +27,20 @@ to isolate errors.
                 -List of series correctly displays the number of books in the series that are actually in library/wishlist
              Problems:
                 -Wishlist books are duplicated in SERIES information in book detail view; an example is:
-                                 Book Details Page - My Books in Series:
-                                 Lists the correct series name, and the correct total number of books in the series, but incorrectly counts
-                                 the one book in the series (that's in the wishlist) twice, resulting in 2/3 books being counted as "my books",
-                                 and lists 4 books in the series even though it correctly counts 3 total books in the series.
+                         Book Details Page - My Books in Series:
+                         -Lists the correct series name, and the correct total number of books in the series, but incorrectly counts
+                         the one book in the series (that's in the wishlist) twice, resulting in 2/3 books being counted as "my books"
+                         -Lists 4 books in the series even though it correctly counts 3 total books in the series
                 -Series Detail (when clicking on series in series table): Shows 2 rows for the same wishlist book.
 
 Possible Next Step
+-Examine the created gallery files to find out if the book is actually duplicated, or just being shown twice
+in series for some reason.
+    -Library.js: Wishlist series book only mentioned once.
+    -Series.js: Wishlist books in series mentioned twice.
+-Added deduplication to process-store-pages.js and process-series-pages.js and issue still happening.
+
+
 Not entirely sure why this is happening. Maybe it something that needs to be fixed when the series data is being written; or a filter needs
 to be added in the series information display. AI suggests looking deduplication logic for the main library view display and series view.
 

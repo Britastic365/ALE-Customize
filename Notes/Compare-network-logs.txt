@@ -1,3 +1,21 @@
+series.js for a series (original ALE):
+
+     {"allBooks":[
+        {"asin":"1515942198","bookNumbers":"1","cover":"51v4w-uULwL","title":"Dark Reign: Vampire's Mark Series, Book 1","titleShort":"Dark Reign"},  //book is in audible library
+        {"asin":"1515942201","bookNumbers":"2","cover":"51xCV82pYsL","notInLibrary":true,"title":"Hell Storm: Vampire's Mark, Book 2","titleShort":"Hell Storm"}, //book is in wishlist but not audible library
+        {"asin":"151594221X","bookNumbers":"3","cover":"617g2HWJn9L","title":"Cold Heir: Vampire's Mark Series, Book 3","titleShort":"Cold Heir"}, //book is in audible library
+        {"asin":"1515942228","bookNumbers":"4","cover":"51H82olA7rL","notInLibrary":true,"title":"The Vampire's Mark 4: Crimson Mist: Vampire's Mark Series, Book 4","titleShort":"The Vampire's Mark 4: Crimson Mist"} //book is not in wishlist or audible library
+     ],"asin":"B07VMQNNYF","books":["1515942198","151594221X"],"length":4},
+
+series.js for a series (add-wishlist-to-library ALE):
+    {"allBooks":[
+        {"asin":"B0CD86T297","bookNumbers":"1","cover":"51iTdpI3nRL","notInLibrary":true,"title":"With Fangs and Claws: The Wolf Queen, Book 1","titleShort":"With Fangs and Claws"}, //WISHLIST ONLY
+        {"asin":"B0CD86T297","bookNumbers":"1","cover":"51iTdpI3nRL","title":"With Fangs and Claws: The Wolf Queen, Book 1","titleShort":"With Fangs and Claws"}, //SHOWING IN LIBRARY EVEN THOUGH IT'S JUST IN WISHLSIT
+        {"asin":"B0CJK2K871","bookNumbers":"2","cover":"51Y20nLEuiL","notInLibrary":true,"title":"Through Battle and Blades: The Wolf Queen, Book 2","titleShort":"Through Battle and Blades"}, //NOT IN WISHLIST OR LIBRARY
+        {"asin":"B0CN1QVCL6","bookNumbers":"3","cover":"51+5CWL-ZXL","notInLibrary":true,"title":"The Wolf Queen: The Wolf Queen, Book 3","titleShort":"The Wolf Queen"} //NOT IN WISHLIST OR LIBRARY
+    ],"asin":"B0CDBXMGTJ","books":["B0CD86T297"],"detachedBooks":true,"length":3}];
+
+
 first book (series)
 start: 1647
 end: 2421

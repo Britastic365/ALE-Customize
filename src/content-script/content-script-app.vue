@@ -1,3 +1,5 @@
+//added deduplication of asins in hotpotato.series
+
 <template>
   <cont-overlay>
     <cont-menu-screen v-if="ui === 'menu-screen'" :domainExtension="domainExtension" :wishlistUrl="wishlistUrl" />
@@ -290,7 +292,13 @@ export default {
       };
       
       removeStragglers('books'); // Library
-      removeStragglers('wishlist'); 
+      removeStragglers('wishlist');
+
+      // FINAL DEDUPLICATION: Only keep unique ASINs in each series, prefer in-library if present
+      _.each(hotpotato.series, series => {
+        series.allBooks = _.sortBy(series.allBooks, b => !!b.notInLibrary); // in-library first
+        series.allBooks = _.uniqBy(series.allBooks, 'asin');
+      });
       
       // Make sure library books are excluded from the wishlist no matter hwhat...
       if ( _.get(hotpotato, 'books.0') && _.get(hotpotato, 'wishlist.0') ) {

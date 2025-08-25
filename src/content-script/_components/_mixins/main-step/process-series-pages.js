@@ -321,7 +321,11 @@ export default {
               series.allBooks.push( aBook );
               
             });
-            
+
+            // DEDUPLICATION: Prefer "in library" version over "notInLibrary"
+              series.allBooks = _.sortBy(series.allBooks, b => !!b.notInLibrary); // notInLibrary last
+              series.allBooks = _.uniqBy(series.allBooks, 'asin');
+              series.books = _.uniq(series.books);
           }
           
           vue.$store.commit('update', { key: 'progress.step', add: 1 });

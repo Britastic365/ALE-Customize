@@ -1,4 +1,5 @@
 //replaced each mention of hotpotato.wishlist with hotpotato.books to save wishlist data with library data so it would be processed the same by process-series-pages.js
+
 export default {
   methods: {
     getDataFromWishlist: function(hotpotato, wishlistFetched) {
