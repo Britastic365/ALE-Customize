@@ -1,3 +1,5 @@
+//add retrieval of pricing and sale information
+
 export default {
   methods: {
     getDataFromStorePages: function(hotpotato, storePagesFetched) {
@@ -511,7 +513,31 @@ export default {
           }
           
         }
-    
+
+          // --- PRICING AND SALE INFO (NEW) ---
+          // Sale percent, if present (e.g. "-30%")
+          const salePercentEl = audible.querySelector('.adbl-text-title-1.adbl-text-attention');
+          if (salePercentEl) {
+              book.salePercent = DOMPurify.sanitize(salePercentEl.textContent.trim());
+          }
+
+          // Current price ("Buy for" price, always present if for sale)
+          const salePriceEl = audible.querySelector('.adbl-text-title-1.adbl-text-primary-fill');
+          if (salePriceEl) {
+              let price = salePriceEl.textContent.replace(/[^0-9.,]/g, '');
+              book.price = parseFloat(price);
+          }
+
+          // Original/strikethrough price (non-member, if present)
+          const regPriceEl = audible.querySelector('.adbl-text-body-xs.adbl-text-tertiary-fill div[style*="line-through"]');
+          if (regPriceEl) {
+              let regPrice = regPriceEl.textContent.replace(/[^0-9.,]/g, '');
+              book.priceOriginal = parseFloat(regPrice);
+          }
+
+          // On sale indicator (true if salePercent or strikethrough present)
+          book.onSale = !!(salePercentEl || regPriceEl);
+
         // Around July 2020 audible has removed any mention of the added date.
         // It was early 2020 when it was removed from the library page and now it's totally gone aside from the purchase history.
         // book.dateAdded   = vue.fixDates( audible.querySelector('#adbl-buy-box-purchase-date > span') );
