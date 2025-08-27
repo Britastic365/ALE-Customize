@@ -1,6 +1,13 @@
 Changes from original ALE
 (in addition to what was required for me to package it)
 
+8/27/2025
+-Current status: Works perfect with smaller wishlists (with under 1,000 series)
+-It's able to complete bigger extractions but isn't able to grab all of the book
+info or series info for larger wishlists
+-Going to try running it a couple of times to see if it fills in the gaps with multiple
+extractions
+phase, and then none of the wishlist
 8/25/25
 1. Tried adding de-duplication to series-processing
     RESULT: Nothing changed
