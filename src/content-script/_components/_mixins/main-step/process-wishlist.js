@@ -1,4 +1,5 @@
 //replaced each mention of hotpotato.wishlist with hotpotato.books to save wishlist data with library data so it would be processed the same by process-series-pages.js
+//set it up to have process-store-pages grab from hotpotato.books
 
 export default {
   methods: {
@@ -78,7 +79,7 @@ export default {
             if ( books.length ) hotpotato.books = (hotpotato.books || []).concat(books); //replaced .wishlist with .books to add to books, not replace it
             
             vue.$nextTick(function() {
-              hotpotato.config.getStorePages = 'wishlist';
+              hotpotato.config.getStorePages = 'books'; //switched wishlsit to books
               wishlistFetched(null, hotpotato);
             });
             
