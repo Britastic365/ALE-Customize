@@ -94,29 +94,25 @@ export default {
                 delete targetSeries.url;
               }
             });
-            
-            // IF SERIES HAVE BEEN EXTRACTED, MERGE FETCHED SERIES WITH THOSE
-            const potatoSeries = _.get(hotpotato, 'series', []);
-            if ( vue.$store.state.storageHasData.books && potatoSeries.length ) {
-              _.each( requests, function( series ) {
-                const seriesExists = _.find(potatoSeries, { asin: series.asin });
-                if ( seriesExists ) _.merge( seriesExists, series );
-                else hotpotato.series.push( series );
-              });
-            }
-            // ALL NEW SERIES: dump requests into potato as is
-            else {
-              hotpotato.series = requests;
-            }
+
+              // Always merge, never overwrite
+              hotpotato.series = _.unionBy(
+                  (hotpotato.series || []).concat(requests),
+                  'asin'
+              );
             
             if ( err ) console.error('%c' + 'error' + '', 'background: #f41b1b; color: #fff; padding: 2px 5px; border-radius: 8px;', err);
-            
+
+              console.log("hotpotato.series after merge:", hotpotato.series);
+
             moveOn();
             
           }
         );
         
       }
+
+
       
       function resetProgress() {
         
