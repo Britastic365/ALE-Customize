@@ -1,0 +1,64 @@
+Changes from original ALE
+(in addition to what was required for me to package it)
+
+8/30/2025
+-Changed process-series to always merge instead of replace hotpotato.series and it fixed the issue!
+-Both library and wishlist detailed series information is retrieved and saved
+-Tested with my personal library with over 1,000 books in the library and over 13,000 books in the wishlist
+-Over 4,000 series total
+-Wishlist and library are fully combined into one list
+
+Little things to change:
+-During extraction, the wishlist stage information still says "out of 2 steps", even though it correctly says
+it's on the 3rd step or 4th step, etc.
+-Need to update the version number of the extension so it's not confused with the real one
+-QUESTION: Will changing the process-series to always merge change anything else or stop anything else from happening
+that needs to happen?
+
+8/28/25
+-Updated process-wishlist.js to set up process-store-pages to pull from hotpotato.books and this solved the issue of not grabbing store data for wishlist books.
+
+8/27/2025
+-Current status: Series extraction works with smaller wishlists (with under 1,000 series) but it's not grabbing
+detailed book information for wishlist books
+-It's able to complete bigger extractions but isn't able to grab all of the book
+info or series info for larger wishlists
+-Going to try running it a couple of times to see if it fills in the gaps with multiple
+extractions-
+phase, and then none of the wishlist
+
+8/25/25
+1. Tried adding de-duplication to series-processing
+    RESULT: Nothing changed
+2. Added de-duplication to series in cleanup phase of content-script-app.vue
+    RESULT: Success! No duplicate ASINs in series anymore!
+
+I believe an ASIN was being added from both hotpotato.books AND from audible wishlist status,
+when checking the book's status in my actual audible account.
+
+8/24/25
+1. Added getseriesdata to after getwishlistdata (after it's getstoredata) in src\content-script\content-script-app.vue
+to fetch series data twice: after library book data retrieval and after wishlist book data retrieval.
+    Result: nothing changed; plugin still worked, but no additional series data retrieved (or shown) in gallery.
+2. Changed src\content-script\_components\_mixins\main-step\process-wishlist.js to save wishlist data to hotpotato.books instead of hotpotato.wishlist
+because even though wishlist series data seems to be saved in the same place as library series, process-series-pages.js seems to be checking
+series data against hotpotato.books and only processing series if a book appears in that file. Ony other thing added was to ensure
+hotpotato.books was added to, not replaced, by wishlist data.  New possibility of duplicates was there but wanted to change things one by one
+to isolate errors.
+    Result: view at https://britastic365.github.io/Combined-Gallery1/#/library
+             Successes:
+             Actually accomplished a few things that I was trying to do, not just get more series data!
+                -Wishlist books were added to library books data
+                -The gallery display only shows the library page now, no wishlist at all
+                -All wishlist books appear in library page, along with pricing information
+                -Expanded series data was pulled (and is shown) for library and wishlist books, but in one series page, instead of separated
+                -Wishlist books are only counted once in library gallery (so no duplicates shown there)
+                -List of series correctly displays the number of books in the series that are actually in library/wishlist
+             Problems:
+                -Wishlist books are duplicated in SERIES information in book detail view; an example is:
+                         Book Details Page - My Books in Series:
+                         -Lists the correct series name, and the correct total number of books in the series, but incorrectly counts
+                         the one book in the series (that's in the wishlist) twice, resulting in 2/3 books being counted as "my books"
+                         -Lists 4 books in the series even though it correctly counts 3 total books in the series
+                -Series Detail (when clicking on series in series table): Shows 2 rows for the same wishlist book.
+
